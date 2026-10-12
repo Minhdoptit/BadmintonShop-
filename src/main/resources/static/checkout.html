@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán Đơn Hàng - Smash Zone AI</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+    <style>
+        .checkout-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
+        .form-card { background: #ffffff; padding: 35px; border-radius: 12px; border: 2px solid var(--border-dark); box-shadow: var(--shadow-xl); }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-container">
+            <a href="/index.html" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">SMASH <span>ZONE</span></span>
+                <span class="logo-badge">AI CODE</span>
+            </a>
+            <div class="user-actions">
+                <a href="/cart.html" class="cart-icon">🛒 <span class="cart-badge" id="cart-count">0</span></a>
+                <div id="user-nav"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 40px; padding-bottom: 70px;">
+        <div style="margin-bottom: 25px;">
+            <span class="badge-pill badge-yellow">ORDER CHECKOUT</span>
+            <h1 style="font-size: 32px; text-transform: uppercase; margin-top: 8px;">Thanh Toán Đơn Hàng</h1>
+        </div>
+
+        <div class="checkout-grid">
+            <div class="form-card">
+                <h3 style="margin-bottom: 24px; border-bottom: 2px solid var(--border-dark); padding-bottom: 12px; text-transform: uppercase;">1. Thông Tin Nhận Hàng</h3>
+                <form id="checkout-form" onsubmit="submitOrder(event)">
+                    <div class="form-group">
+                        <label>Họ và tên người nhận (*)</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="Nguyễn Văn A..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại (*)</label>
+                        <input type="tel" id="phoneNumber" class="form-control" placeholder="0987..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ giao hàng (*)</label>
+                        <input type="text" id="deliveryAddress" class="form-control" placeholder="Số nhà, tên đường, Phường/Xã..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tỉnh / Thành phố (*)</label>
+                        <input type="text" id="city" class="form-control" placeholder="Hà Nội, TP.HCM..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phương thức thanh toán</label>
+                        <select id="paymentMethod" class="form-control" style="font-weight: 700;">
+                            <option value="COD">💵 Thanh toán khi nhận hàng (COD)</option>
+                            <option value="BANK_TRANSFER">💳 Chuyển khoản ngân hàng (QR Code)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px; margin-top: 15px;">
+                        XÁC NHẬN ĐẶT HÀNG NGAY ➔
+                    </button>
+                </form>
+            </div>
+
+            <div class="form-card" style="height: fit-content;">
+                <h3 style="margin-bottom: 24px; border-bottom: 2px solid var(--border-dark); padding-bottom: 12px; text-transform: uppercase;">2. Tóm Tắt Đơn Hàng</h3>
+                <div id="order-summary-items">
+                    <p>Đang tải đơn hàng...</p>
+                </div>
+                <div style="border-top: 2px dashed var(--border-dark); margin-top: 20px; padding-top: 20px; display: flex; justify-content: space-between; font-size: 20px;">
+                    <span style="font-weight: 800;">Tổng thanh toán:</span>
+                    <strong id="order-total" style="color: var(--brand-primary); font-size: 22px;">0 đ</strong>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check auth
+            fetch('/api/auth/me')
+                .then(res => res.json())
+                .then(auth => {
+                    if (!auth.authenticated) {
+                        alert("⚠️ Vui lòng đăng nhập để tiến hành thanh toán!");
+                        window.location.href = '/login.html';
+                        return;
+                    }
+                    if (auth.user) {
+                        document.getElementById('fullName').value = auth.user.fullName || '';
+                        document.getElementById('phoneNumber').value = auth.user.phoneNumber || auth.user.phone || '';
+                        document.getElementById('deliveryAddress').value = auth.user.address || '';
+                        document.getElementById('city').value = auth.user.city || 'Hà Nội';
+                    }
+                });
+
+            // Load Cart Summary
+            fetch('/api/cart')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.items || data.items.length === 0) {
+                        alert("Giỏ hàng của bạn đang trống!");
+                        window.location.href = '/cart.html';
+                        return;
+                    }
+
+                    const itemsContainer = document.getElementById('order-summary-items');
+                    itemsContainer.innerHTML = data.items.map(item => `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 14px; padding-bottom: 10px; border-bottom: 1px solid #f0ede8;">
+                            <span><strong>${item.productName}</strong> <span class="badge-pill badge-orange" style="margin-left:4px;">x${item.quantity}</span></span>
+                            <span style="color: var(--brand-primary); font-weight: 800;">${formatCurrency(item.totalPrice)}</span>
+                        </div>
+                    `).join('');
+
+                    document.getElementById('order-total').textContent = formatCurrency(data.totalAmount);
+                });
+        });
+
+        function submitOrder(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phoneNumber').value;
+            const address = document.getElementById('deliveryAddress').value + ', ' + document.getElementById('city').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+
+            fetch('/api/orders/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName, phone, deliveryAddress: address, paymentMethod })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("🎉 " + data.message);
+                    window.location.href = '/order-history.html';
+                } else {
+                    alert("❌ " + (data.message || "Đặt hàng thất bại"));
+                }
+            })
+            .catch(err => {
+                alert("Lỗi kết nối server!");
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sản Phẩm - Smash Zone Admin</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="/admin/dashboard.html" class="sidebar-brand">
+                <span>⚡</span> SMASH ZONE AI
+            </a>
+            <ul class="sidebar-menu">
+                <li><a href="/admin/dashboard.html" class="sidebar-link">📊 Thống Kê Chung</a></li>
+                <li><a href="/admin/products.html" class="sidebar-link active">🏸 Quản Lý Sản Phẩm</a></li>
+                <li><a href="/admin/orders.html" class="sidebar-link">📦 Quản Lý Đơn Hàng</a></li>
+                <li><a href="/admin/users.html" class="sidebar-link">👤 Quản Lý Người Dùng</a></li>
+                <li><a href="/index.html" class="sidebar-link" style="margin-top: 20px; border: 1.5px dashed var(--border-dark);">🏪 Về Trang Bán Hàng</a></li>
+            </ul>
+        </aside>
+
+        <!-- Admin Content -->
+        <main class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <span class="badge-pill badge-yellow">ADMIN MANAGEMENT</span>
+                    <h1 style="font-size: 28px; text-transform: uppercase; margin-top: 6px;">Quản Lý Sản Phẩm Cầu Lông</h1>
+                </div>
+                <button onclick="openProductModal()" class="btn btn-primary" style="padding: 12px 24px;">
+                    + THÊM SẢN PHẨM MỚI
+                </button>
+            </div>
+
+            <!-- Products Table -->
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">ID</th>
+                        <th style="width: 90px;">Hình Ảnh</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Hãng</th>
+                        <th>Danh Mục</th>
+                        <th>Đơn Giá</th>
+                        <th>Tồn Kho</th>
+                        <th style="text-align: right;">Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody id="products-tbody">
+                    <tr><td colspan="8" style="text-align: center;">Đang tải danh sách sản phẩm...</td></tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- Modal Form Thêm/Sửa Sản Phẩm Neobrutalism -->
+    <div id="product-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title" style="text-transform: uppercase; font-size: 18px;">Thêm Sản Phẩm Mới</h3>
+                <button onclick="closeProductModal()" class="close-btn">✕</button>
+            </div>
+            <form id="product-form" onsubmit="saveProduct(event)">
+                <input type="hidden" id="prod-id">
+                <div class="form-group">
+                    <label>Tên sản phẩm (*)</label>
+                    <input type="text" id="prod-name" class="form-control" required placeholder="Ví dụ: Vợt Cầu Lông Yonex Astrox 100ZZ...">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label>Thương hiệu</label>
+                        <input type="text" id="prod-brand" class="form-control" placeholder="Yonex, Victor, Lining...">
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục</label>
+                        <select id="prod-cat" class="form-control" style="font-weight: 700;">
+                            <option value="1">Vợt cầu lông</option>
+                            <option value="2">Giày cầu lông</option>
+                            <option value="3">Phụ kiện cầu lông</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label>Giá bán (VNĐ) (*)</label>
+                        <input type="number" id="prod-price" class="form-control" required placeholder="2500000">
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng tồn kho</label>
+                        <input type="number" id="prod-qty" class="form-control" value="50" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Link ảnh sản phẩm (URL)</label>
+                    <input type="url" id="prod-img" class="form-control" placeholder="https://images.unsplash.com/...">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
+                    <button type="button" onclick="closeProductModal()" class="btn btn-secondary">Hủy Bỏ</button>
+                    <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        let allProducts = [];
+
+        document.addEventListener('DOMContentLoaded', loadAdminProducts);
+
+        function loadAdminProducts() {
+            fetch('/api/products')
+                .then(res => res.json())
+                .then(products => {
+                    allProducts = products;
+                    const tbody = document.getElementById('products-tbody');
+                    if (!products || products.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Chưa có sản phẩm nào.</td></tr>';
+                        return;
+                    }
+
+                    tbody.innerHTML = products.map(p => {
+                        const pId = p.productId || p.id;
+                        const pName = p.productName || p.name;
+                        const pPrice = p.unitPrice || p.price || 0;
+                        const pImg = p.image || 'https://images.unsplash.com/photo-1554080353-a576cf803bda?w=100';
+                        const pCat = p.categoryName || 'Vợt cầu lông';
+                        const pBrand = p.brand || 'YONEX';
+                        const pQty = p.quantity !== undefined ? p.quantity : 50;
+
+                        return `
+                            <tr>
+                                <td><strong>#${pId}</strong></td>
+                                <td><img src="${pImg}" style="width: 50px; height: 50px; object-fit: contain; border: 1.5px solid var(--border-dark); border-radius: 6px; background: #fff; padding: 2px;"></td>
+                                <td><strong style="font-size: 15px;">${pName}</strong></td>
+                                <td><span class="badge-pill badge-orange">${pBrand}</span></td>
+                                <td><span class="badge-pill badge-yellow">${pCat}</span></td>
+                                <td style="font-weight: 900; color: var(--brand-primary);">${formatCurrency(pPrice)}</td>
+                                <td><strong>${pQty}</strong></td>
+                                <td style="text-align: right;">
+                                    <button onclick="editProduct(${pId})" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; margin-right: 6px;">✏️ Sửa</button>
+                                    <button onclick="deleteProduct(${pId})" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; background: #fee2e2;">🗑️ Xóa</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                });
+        }
+
+        function openProductModal(isEdit = false) {
+            document.getElementById('modal-title').textContent = isEdit ? 'CẬP NHẬT SẢN PHẨM' : 'THÊM SẢN PHẨM MỚI';
+            document.getElementById('product-modal').style.display = 'flex';
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').style.display = 'none';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-id').value = '';
+        }
+
+        function editProduct(id) {
+            const p = allProducts.find(x => (x.id || x.productId) === id);
+            if (!p) return;
+
+            document.getElementById('prod-id').value = id;
+            document.getElementById('prod-name').value = p.productName || p.name || '';
+            document.getElementById('prod-brand').value = p.brand || 'YONEX';
+            document.getElementById('prod-cat').value = (p.categoryId || 1);
+            document.getElementById('prod-price').value = (p.unitPrice || p.price || 0);
+            document.getElementById('prod-qty').value = (p.quantity !== undefined ? p.quantity : 50);
+            document.getElementById('prod-img').value = p.image || '';
+
+            openProductModal(true);
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value;
+            const payload = {
+                name: document.getElementById('prod-name').value,
+                brand: document.getElementById('prod-brand').value,
+                categoryId: parseInt(document.getElementById('prod-cat').value),
+                price: parseFloat(document.getElementById('prod-price').value),
+                quantity: parseInt(document.getElementById('prod-qty').value),
+                image: document.getElementById('prod-img').value
+            };
+
+            const url = id ? ('/api/products/' + id) : '/api/products';
+            const method = id ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(() => {
+                alert("✅ Đã lưu sản phẩm thành công!");
+                closeProductModal();
+                loadAdminProducts();
+            })
+            .catch(err => {
+                alert("❌ Lỗi khi lưu sản phẩm!");
+                console.error(err);
+            });
+        }
+
+        function deleteProduct(id) {
+            if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm #" + id + "?")) return;
+            fetch('/api/products/' + id, { method: 'DELETE' })
+                .then(() => {
+                    alert("✅ Đã xóa sản phẩm thành công!");
+                    loadAdminProducts();
+                })
+                .catch(err => alert("❌ Lỗi khi xóa sản phẩm!"));
+        }
+    </script>
+</body>
+</html>

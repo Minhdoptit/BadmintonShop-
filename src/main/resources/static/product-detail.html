@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm - Smash Zone AI</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+    <style>
+        .detail-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 45px;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 14px;
+            border: 2px solid var(--border-dark);
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 50px;
+        }
+        .detail-img {
+            border: 2px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 25px;
+            background: #fdfbf7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+        }
+        .detail-img img {
+            max-width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+        }
+        .detail-info h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .detail-price {
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--brand-primary);
+            margin-bottom: 20px;
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 2px solid var(--border-dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .spec-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        .spec-table tr:nth-child(even) {
+            background-color: #fdfbf7;
+        }
+        .spec-table td:first-child {
+            color: var(--text-muted);
+            font-weight: 700;
+            width: 40%;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .qty-input {
+            width: 60px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 2px solid var(--border-dark);
+            background: #ffffff;
+            color: var(--text-main);
+            text-align: center;
+            font-size: 16px;
+            font-weight: 800;
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-container">
+            <a href="/index.html" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">SMASH <span>ZONE</span></span>
+                <span class="logo-badge">AI CODE</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/index.html">Trang Chủ</a>
+                <a href="/products.html" class="active">Sản Phẩm</a>
+            </nav>
+            <div class="user-actions">
+                <a href="/cart.html" class="cart-icon">🛒 <span class="cart-badge" id="cart-count">0</span></a>
+                <div id="user-nav"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 40px; padding-bottom: 70px;">
+        <div id="product-container">
+            <p>Đang tải thông tin sản phẩm...</p>
+        </div>
+
+        <!-- Khối AI Gợi Ý Tương Tự -->
+        <section class="recommendations-block" id="block-similar" style="display: none; margin-top: 50px;">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="badge-pill badge-yellow">TF-IDF SIMILARITY</span>
+                    <h2>🤖 Sản Phẩm Tương Tự Đề Xuất (AI Engine)</h2>
+                </div>
+            </div>
+            <div class="products-grid" id="grid-similar"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col">
+                <a href="/index.html" class="logo"><span class="logo-icon">⚡</span><span class="logo-text">SMASH <span>ZONE</span></span></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Smash Zone Badminton Shop.</p>
+        </div>
+    </footer>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (!id) {
+                document.getElementById('product-container').innerHTML = '<p>Sản phẩm không tồn tại.</p>';
+                return;
+            }
+
+            fetch('/api/products/' + id)
+                .then(res => res.json())
+                .then(data => {
+                    const p = data.product || data;
+                    if (!p || (!p.id && !p.productId)) {
+                        document.getElementById('product-container').innerHTML = '<p>Không tìm thấy sản phẩm.</p>';
+                        return;
+                    }
+
+                    const pId = p.productId || p.id;
+                    const pName = p.productName || p.name;
+                    const pPrice = p.unitPrice || p.price || 0;
+                    const pImg = p.image || 'https://images.unsplash.com/photo-1554080353-a576cf803bda?w=500';
+
+                    document.title = pName + ' - Smash Zone AI';
+
+                    let specsHtml = '';
+                    if (p.specifications) {
+                        for (let [k, v] of Object.entries(p.specifications)) {
+                            specsHtml += `<tr><td>${k}</td><td><strong>${v}</strong></td></tr>`;
+                        }
+                    } else {
+                        specsHtml = `
+                            <tr><td>Trọng lượng / Chu vi cán</td><td><strong>4U (80-84g) / G5</strong></td></tr>
+                            <tr><td>Điểm cân bằng</td><td><strong>295mm (Hơi nặng đầu - Công thủ toàn diện)</strong></td></tr>
+                            <tr><td>Độ dẻo thân vợt</td><td><strong>Cứng trung bình (Medium Stiff)</strong></td></tr>
+                            <tr><td>Sức căng khuyến nghị</td><td><strong>24 - 28 LBS</strong></td></tr>
+                            <tr><td>Bảo hành</td><td><strong>6 tháng chính hãng 1 đổi 1</strong></td></tr>
+                        `;
+                    }
+
+                    document.getElementById('product-container').innerHTML = `
+                        <div class="detail-wrapper">
+                            <div class="detail-img">
+                                <img src="${pImg}" alt="${pName}" onerror="this.src='https://images.unsplash.com/photo-1554080353-a576cf803bda?w=500'">
+                            </div>
+                            <div class="detail-info">
+                                <span class="badge-pill badge-orange">${p.categoryName || 'Sản Phẩm Cao Cấp'}</span>
+                                <h1 style="margin-top:12px;">${pName}</h1>
+                                <div class="detail-price">${formatCurrency(pPrice)}</div>
+                                <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; font-size: 15px;">${p.description || p.metadataForAi || 'Thiết bị cầu lông thi đấu chính hãng. Khung vợt cải tiến khí động học, tăng tốc độ vung vợt và uy lực của từng cú smash.'}</p>
+
+                                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                                    <label style="font-size: 14px; font-weight: 800; text-transform: uppercase;">Số lượng:</label>
+                                    <div style="display:flex; align-items:center; gap:6px;">
+                                        <button class="btn btn-secondary" style="padding:6px 12px; font-size:16px;" onclick="changeQty(-1)">-</button>
+                                        <input type="number" id="detail-qty" class="qty-input" value="1" min="1">
+                                        <button class="btn btn-secondary" style="padding:6px 12px; font-size:16px;" onclick="changeQty(1)">+</button>
+                                    </div>
+                                    <button onclick="handleAddToCart(${pId})" class="btn btn-primary" style="padding: 12px 28px; font-size: 15px;">
+                                        🛒 + Thêm Vào Giỏ Hàng
+                                    </button>
+                                </div>
+
+                                <h4 style="margin-bottom: 12px; text-transform: uppercase; font-size: 15px;">Thông Số Kỹ Thuật Chi Tiết</h4>
+                                <table class="spec-table">
+                                    ${specsHtml}
+                                </table>
+                            </div>
+                        </div>
+                    `;
+
+                    // Handle Similar Products
+                    if (data.similarProducts && data.similarProducts.length > 0) {
+                        const similarGrid = document.getElementById('grid-similar');
+                        similarGrid.innerHTML = data.similarProducts.map(s => {
+                            const sId = s.productId || s.id;
+                            const sName = s.productName || s.name;
+                            const sPrice = s.unitPrice || s.price || 0;
+                            const sImg = s.image || 'https://images.unsplash.com/photo-1554080353-a576cf803bda?w=300';
+                            return `
+                                <div class="product-card">
+                                    <div class="product-img-wrapper">
+                                        <span class="badge-pill badge-yellow product-tag">AI MATCH</span>
+                                        <a href="/product-detail.html?id=${sId}" style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+                                            <img src="${sImg}" alt="${sName}" class="product-img">
+                                        </a>
+                                    </div>
+                                    <div class="product-info">
+                                        <a href="/product-detail.html?id=${sId}" class="product-name" title="${sName}">
+                                            ${sName}
+                                        </a>
+                                        <div class="product-price-row">
+                                            <span class="product-price">${formatCurrency(sPrice)}</span>
+                                        </div>
+                                        <div style="margin-top: 14px; display: flex; gap: 8px;">
+                                            <a href="/product-detail.html?id=${sId}" class="btn btn-secondary" style="flex:1; font-size:12px; padding:8px 6px;">Chi Tiết</a>
+                                            <button onclick="addToCart(${sId}, 1)" class="btn btn-primary" style="flex:1.2; font-size:12px; padding:8px 6px;">+ Giỏ Hàng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                        document.getElementById('block-similar').style.display = 'block';
+                    }
+                });
+        });
+
+        function changeQty(delta) {
+            const input = document.getElementById('detail-qty');
+            let val = parseInt(input.value) || 1;
+            val = Math.max(1, val + delta);
+            input.value = val;
+        }
+
+        function handleAddToCart(pId) {
+            const qty = parseInt(document.getElementById('detail-qty').value) || 1;
+            addToCart(pId, qty);
+        }
+    </script>
+</body>
+</html>

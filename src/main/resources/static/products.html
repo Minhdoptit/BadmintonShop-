@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Sản Phẩm - Smash Zone AI</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+    <style>
+        .filter-tags {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-btn {
+            padding: 10px 22px;
+            border-radius: 9999px;
+            background: #ffffff !important;
+            border: 2px solid #181810 !important;
+            box-shadow: 2px 2px 0px #181810 !important;
+            color: #181810 !important;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-btn:hover {
+            background: #fef08a !important;
+            color: #181810 !important;
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px #181810 !important;
+        }
+        .filter-btn.active {
+            background: #f97316 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0px #181810 !important;
+            transform: translate(-1px, -1px);
+        }
+        /* Controls bar */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border: 2px solid var(--border-dark);
+            border-radius: 10px;
+            padding: 12px 20px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .sort-select {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 2px solid var(--border-dark);
+            background: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+        /* Pagination Bar */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 45px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            padding: 9px 16px;
+            border-radius: 8px;
+            border: 2px solid var(--border-dark);
+            background: #ffffff;
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 var(--border-dark);
+            transition: all 0.15s ease;
+            min-width: 40px;
+            text-align: center;
+        }
+        .page-btn:hover:not(:disabled) {
+            background: #fef08a;
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0 var(--border-dark);
+        }
+        .page-btn.active {
+            background: var(--brand-primary) !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 var(--border-dark);
+        }
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-container">
+            <a href="/index.html" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">SMASH <span>ZONE</span></span>
+                <span class="logo-badge">AI CODE</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/index.html">Trang Chủ</a>
+                <a href="/products.html" class="active">Sản Phẩm</a>
+                <a href="/products.html?category=V%E1%BB%A3t%20C%E1%BA%A7u%20L%C3%B4ng">Vợt Cầu Lông</a>
+                <a href="/products.html?category=Gi%C3%A0y%20C%E1%BA%A7u%20L%C3%B4ng">Giày Thi Đấu</a>
+                <a href="/products.html?category=Qu%E1%BA%A3%20C%E1%BA%A7u%20L%C3%B4ng">Quả Cầu Lông</a>
+            </nav>
+            <div class="search-box">
+                <form action="/products.html" method="GET">
+                    <input type="text" id="search-input" name="search" placeholder="Tìm kiếm sản phẩm...">
+                    <button type="submit">TÌM</button>
+                </form>
+            </div>
+            <div class="user-actions">
+                <a href="/cart.html" class="cart-icon">🛒 <span class="cart-badge" id="cart-count">0</span></a>
+                <div id="user-nav"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 40px; padding-bottom: 70px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
+            <div>
+                <span class="badge-pill badge-yellow" style="margin-bottom: 8px;">KHO THIẾT BỊ CHÍNH HÃNG</span>
+                <h1 id="page-title" style="font-size: 32px; text-transform: uppercase;">Tất Cả Sản Phẩm</h1>
+                <p id="page-subtitle" style="color: var(--text-muted); font-size: 15px;">Tuyển chọn từ Yonex, Victor, Lining chính hãng 100%</p>
+            </div>
+        </div>
+
+        <!-- Bộ Lọc Danh Mục (Chia Trang Theo Danh Mục) -->
+        <div class="filter-tags" id="category-filters">
+            <button onclick="setCategoryFilter('', this)" class="filter-btn active" data-cat="">⚡ Tất Cả</button>
+            <button onclick="setCategoryFilter('Vợt Cầu Lông', this)" class="filter-btn" data-cat="Vợt Cầu Lông">🏸 Vợt Cầu Lông</button>
+            <button onclick="setCategoryFilter('Giày Cầu Lông', this)" class="filter-btn" data-cat="Giày Cầu Lông">👟 Giày Chuyên Dụng</button>
+            <button onclick="setCategoryFilter('Quả Cầu Lông', this)" class="filter-btn" data-cat="Quả Cầu Lông">🏸 Quả Cầu & Phụ Kiện</button>
+        </div>
+
+        <!-- Thanh Điều Khiển & Sắp Xếp -->
+        <div class="controls-bar">
+            <div id="pagination-info" style="font-weight: 700; font-size: 14px; color: var(--text-muted);">
+                Đang tải dữ liệu sản phẩm...
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label style="font-size: 13px; font-weight: 800; text-transform: uppercase;">Sắp xếp:</label>
+                <select id="sort-select" class="sort-select" onchange="applySorting()">
+                    <option value="default">Mặc định (Khuyên dùng)</option>
+                    <option value="price-asc">Giá: Thấp đến Cao ⬆</option>
+                    <option value="price-desc">Giá: Cao đến Thấp ⬇</option>
+                    <option value="name-asc">Tên: A ➔ Z</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Lưới Sản Phẩm -->
+        <div class="products-grid" id="products-list">
+            <p>Đang tải danh sách thiết bị...</p>
+        </div>
+
+        <!-- Thanh Phân Trang (Pagination) -->
+        <div class="pagination-container" id="pagination-bar"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col">
+                <a href="/index.html" class="logo">
+                    <span class="logo-icon">⚡</span><span class="logo-text">SMASH <span>ZONE</span></span>
+                </a>
+                <p style="margin-top: 15px; color: var(--text-muted); font-size: 14px;">Trang bị đỉnh cao từ Yonex, Victor, Lining chính hãng 100%.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Smash Zone Badminton Shop.</p>
+        </div>
+    </footer>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        // State Management
+        let rawProducts = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const PAGE_SIZE = 12; // 12 sản phẩm trên 1 trang
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const search = urlParams.get('search');
+            const pageParam = parseInt(urlParams.get('page'));
+            if (pageParam && pageParam > 0) currentPage = pageParam;
+
+            let apiUrl = '/api/products';
+            if (search) {
+                apiUrl += '?search=' + encodeURIComponent(search);
+                document.getElementById('page-title').textContent = `Tìm kiếm: "${search}"`;
+                document.getElementById('search-input').value = search;
+            } else if (category) {
+                apiUrl += '?category=' + encodeURIComponent(category);
+                document.getElementById('page-title').textContent = category;
+            }
+
+            // Đánh dấu active trên nút danh mục
+            updateActiveCategoryBtn(category || '');
+
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(products => {
+                    rawProducts = products || [];
+                    filteredProducts = [...rawProducts];
+                    applySorting(false);
+                })
+                .catch(err => {
+                    console.error("Lỗi khi tải danh sách sản phẩm:", err);
+                    document.getElementById('products-list').innerHTML = '<p style="color:var(--text-muted)">Không thể kết nối máy chủ.</p>';
+                });
+        });
+
+        function updateActiveCategoryBtn(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const btnCat = btn.getAttribute('data-cat');
+                if ((!category && !btnCat) || (category && btnCat.toLowerCase() === category.toLowerCase()) || (category && btnCat.includes(category)) || (category && category.includes(btnCat))) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function setCategoryFilter(category, btnElement) {
+            updateActiveCategoryBtn(category);
+            document.getElementById('page-title').textContent = category || 'Tất Cả Sản Phẩm';
+            currentPage = 1;
+
+            let apiUrl = '/api/products';
+            if (category) {
+                apiUrl += '?category=' + encodeURIComponent(category);
+            }
+
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(products => {
+                    rawProducts = products || [];
+                    filteredProducts = [...rawProducts];
+                    applySorting();
+                });
+        }
+
+        function applySorting(shouldScroll = true) {
+            const sortType = document.getElementById('sort-select').value;
+            if (sortType === 'price-asc') {
+                filteredProducts.sort((a, b) => (a.unitPrice || a.price || 0) - (b.unitPrice || b.price || 0));
+            } else if (sortType === 'price-desc') {
+                filteredProducts.sort((a, b) => (b.unitPrice || b.price || 0) - (a.unitPrice || a.price || 0));
+            } else if (sortType === 'name-asc') {
+                filteredProducts.sort((a, b) => (a.productName || a.name || '').localeCompare(b.productName || b.name || ''));
+            } else {
+                filteredProducts = [...rawProducts];
+            }
+
+            renderCurrentPage(shouldScroll);
+        }
+
+        function renderCurrentPage(shouldScroll = true) {
+            const list = document.getElementById('products-list');
+            const totalItems = filteredProducts.length;
+            const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
+
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            // Info Bar
+            const startIdx = totalItems === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+            const endIdx = Math.min(currentPage * PAGE_SIZE, totalItems);
+            document.getElementById('pagination-info').innerHTML = `
+                Hiển thị <strong>${startIdx} - ${endIdx}</strong> trong tổng số <strong>${totalItems}</strong> sản phẩm (Trang ${currentPage}/${totalPages})
+            `;
+
+            if (totalItems === 0) {
+                list.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px; background: #fff; border: 2px solid var(--border-dark); border-radius: 12px; box-shadow: var(--shadow-md);"><p style="font-size: 18px; font-weight: 700; color: var(--text-muted);">Không tìm thấy sản phẩm nào trong danh mục này.</p></div>';
+                document.getElementById('pagination-bar').innerHTML = '';
+                return;
+            }
+
+            // Cắt đúng 12 sản phẩm của trang hiện tại
+            const pageProducts = filteredProducts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+            list.innerHTML = pageProducts.map(p => {
+                const pId = p.productId || p.id;
+                const pName = p.productName || p.name || 'Sản phẩm cầu lông';
+                const pImg = p.image || 'https://images.unsplash.com/photo-1554080353-a576cf803bda?w=400';
+                const pPrice = p.unitPrice || p.price || 0;
+                const pCat = p.categoryName || 'Chính Hãng';
+                const pBrand = p.brand || 'YONEX';
+
+                return `
+                    <div class="product-card">
+                        <div class="product-img-wrapper">
+                            <span class="badge-pill badge-orange product-tag">${pBrand}</span>
+                            <a href="/product-detail.html?id=${pId}" style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+                                <img src="${pImg}" alt="${pName}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1554080353-a576cf803bda?w=400'">
+                            </a>
+                        </div>
+                        <div class="product-info">
+                            <span style="font-size:11px; text-transform:uppercase; color:var(--brand-primary); font-weight:800; letter-spacing:0.5px;">${pCat}</span>
+                            <a href="/product-detail.html?id=${pId}" class="product-name" title="${pName}">
+                                ${pName}
+                            </a>
+                            <div class="product-price-row">
+                                <span class="product-price">${formatCurrency(pPrice)}</span>
+                            </div>
+                            <div style="margin-top: 14px; display: flex; gap: 8px;">
+                                <a href="/product-detail.html?id=${pId}" class="btn btn-secondary" style="flex:1; font-size:12px; padding:8px 6px;">Chi Tiết</a>
+                                <button onclick="addToCart(${pId}, 1)" class="btn btn-primary" style="flex:1.2; font-size:12px; padding:8px 6px;">+ Giỏ Hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render Pagination Buttons
+            renderPaginationButtons(totalPages);
+
+            if (shouldScroll) {
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+            }
+        }
+
+        function renderPaginationButtons(totalPages) {
+            const container = document.getElementById('pagination-bar');
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            // Nút Previous
+            html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">❮ Trước</button>`;
+
+            // Các nút số trang
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    html += `<span style="padding:0 4px; font-weight:900;">...</span>`;
+                }
+            }
+
+            // Nút Next
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">Sau ❯</button>`;
+
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderCurrentPage(true);
+        }
+    </script>
+</body>
+</html>

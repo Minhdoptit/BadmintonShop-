@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Hàng - Admin Smash Zone</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <style>
+        .admin-nav { display: flex; gap: 15px; margin-bottom: 30px; background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155; }
+        .admin-nav a { color: var(--text-muted); text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; font-size: 14px; }
+        .admin-nav a.active, .admin-nav a:hover { background: var(--primary-cyan); color: #000; font-weight: bold; }
+        .table-card { background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; }
+        .status-select { background: #0f172a; color: white; border: 1px solid #334155; padding: 4px 8px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-container">
+            <a href="/index.html" class="logo"><span class="logo-icon">⚡</span><span class="logo-text">SMASH <span>ZONE ADMIN</span></span></a>
+            <div class="user-actions"><a href="/index.html" class="btn btn-secondary">Trang Chủ</a></div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 30px; padding-bottom: 60px;">
+        <nav class="admin-nav">
+            <a href="/admin/dashboard.html">📊 Thống Kê Dashboard</a>
+            <a href="/admin/products.html">📦 Quản Lý Sản Phẩm</a>
+            <a href="/admin/orders.html" class="active">🛒 Quản Lý Đơn Hàng</a>
+            <a href="/admin/users.html">👥 Quản Lý Người Dùng</a>
+        </nav>
+
+        <h2 style="margin-bottom: 20px;">Quản Lý Tất Cả Đơn Hàng</h2>
+
+        <div class="table-card">
+            <table style="width:100%; border-collapse:collapse;" id="orders-table">
+                <thead>
+                    <tr style="border-bottom:1px solid #334155; text-align:left; color:var(--text-muted); font-size:13px;">
+                        <th style="padding:10px;">Mã Đơn</th>
+                        <th style="padding:10px;">Khách Hàng</th>
+                        <th style="padding:10px;">Địa Chỉ Giao Hàng</th>
+                        <th style="padding:10px;">Tổng Tiền</th>
+                        <th style="padding:10px;">Trạng Thái</th>
+                        <th style="padding:10px;">Cập Nhật</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadOrders);
+
+        function loadOrders() {
+            fetch('/api/admin/orders')
+                .then(res => res.json())
+                .then(orders => {
+                    if (orders.error) {
+                        alert(orders.error);
+                        window.location.href = '/index.html';
+                        return;
+                    }
+                    const tbody = document.querySelector('#orders-table tbody');
+                    tbody.innerHTML = orders.map(o => `
+                        <tr style="border-bottom:1px solid #334155; font-size:14px;">
+                            <td style="padding:10px;">#${o.orderId}</td>
+                            <td style="padding:10px;">User #${o.userId}</td>
+                            <td style="padding:10px; color:var(--text-muted); font-size:12px;">${o.deliveryAddress || 'N/A'}</td>
+                            <td style="padding:10px; color:var(--primary-cyan); font-weight:bold;">${formatCurrency(o.totalAmount)}</td>
+                            <td style="padding:10px;">
+                                <select class="status-select" id="status-${o.orderId}">
+                                    <option value="PENDING" ${o.status === 'PENDING' ? 'selected' : ''}>Chờ xác nhận (PENDING)</option>
+                                    <option value="SHIPPING" ${o.status === 'SHIPPING' ? 'selected' : ''}>Đang giao (SHIPPING)</option>
+                                    <option value="DELIVERED" ${o.status === 'DELIVERED' ? 'selected' : ''}>Đã giao thành công (DELIVERED)</option>
+                                    <option value="CANCELLED" ${o.status === 'CANCELLED' ? 'selected' : ''}>Đã hủy (CANCELLED)</option>
+                                </select>
+                            </td>
+                            <td style="padding:10px;">
+                                <button onclick="updateStatus(${o.orderId})" class="btn btn-primary" style="padding:4px 10px; font-size:12px;">Lưu</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                });
+        }
+
+        function updateStatus(orderId) {
+            const select = document.getElementById('status-' + orderId);
+            const newStatus = select.value;
+
+            fetch('/api/admin/orders/' + orderId + '/status', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                loadOrders();
+            });
+        }
+    </script>
+</body>
+</html>

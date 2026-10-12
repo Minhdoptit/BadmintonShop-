@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Cá Nhân - Smash Zone</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+    <style>
+        .user-dropdown { position: relative; display: inline-block; cursor: pointer; }
+        .dropdown-content { display: none; position: absolute; right: 0; background-color: #1e293b; min-width: 180px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1000; border-radius: 8px; overflow: hidden; border: 1px solid #334155; }
+        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; }
+        .dropdown-content a:hover { background-color: #334155; }
+        .user-dropdown:hover .dropdown-content { display: block; }
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .card { background: #1e293b; padding: 30px; border-radius: 12px; border: 1px solid #334155; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 13px; }
+        .form-control { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-container">
+            <a href="/index.html" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">SMASH <span>ZONE</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="/index.html">Trang Chủ</a>
+                <a href="/products.html">Sản Phẩm</a>
+            </nav>
+            <div class="user-actions">
+                <a href="/cart.html" class="cart-icon">🛒 <span class="cart-badge" id="cart-count">0</span></a>
+                <div id="user-nav"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+        <h1 style="margin-bottom: 25px;">Quản Lý Tài Khoản</h1>
+
+        <div class="profile-grid">
+            <div class="card">
+                <h3 style="margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px;">Thông Tin Cá Nhân</h3>
+                <form id="profile-form" onsubmit="updateProfile(event)">
+                    <div class="form-group">
+                        <label>Tên đăng nhập</label>
+                        <input type="text" id="username" class="form-control" disabled style="opacity: 0.6;">
+                    </div>
+                    <div class="form-group">
+                        <label>Họ và tên</label>
+                        <input type="text" id="fullName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="tel" id="phoneNumber" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" id="address" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Thành phố</label>
+                        <input type="text" id="city" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 10px;">
+                        Lưu Thay Đổi
+                    </button>
+                </form>
+            </div>
+
+            <div class="card" style="height: fit-content;">
+                <h3 style="margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px;">Đổi Mật Khẩu</h3>
+                <form id="pwd-form" onsubmit="changePassword(event)">
+                    <div class="form-group">
+                        <label>Mật khẩu hiện tại</label>
+                        <input type="password" id="currentPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu mới</label>
+                        <input type="password" id="newPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirmPassword" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary" style="width: 100%; padding: 12px; margin-top: 10px;">
+                        Đổi Mật Khẩu
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/profile')
+                .then(res => res.json())
+                .then(user => {
+                    if (user.error) {
+                        alert("Vui lòng đăng nhập!");
+                        window.location.href = '/login.html';
+                        return;
+                    }
+                    document.getElementById('username').value = user.username || '';
+                    document.getElementById('fullName').value = user.fullName || '';
+                    document.getElementById('email').value = user.email || '';
+                    document.getElementById('phoneNumber').value = user.phoneNumber || '';
+                    document.getElementById('address').value = user.address || '';
+                    document.getElementById('city').value = user.city || '';
+                });
+        });
+
+        function updateProfile(e) {
+            e.preventDefault();
+            const body = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value
+            };
+
+            fetch('/api/profile/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) checkCurrentUser();
+            });
+        }
+
+        function changePassword(e) {
+            e.preventDefault();
+            const body = {
+                currentPassword: document.getElementById('currentPassword').value,
+                newPassword: document.getElementById('newPassword').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            fetch('/api/profile/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) document.getElementById('pwd-form').reset();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điều Khiển - Smash Zone Admin</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="/admin/dashboard.html" class="sidebar-brand">
+                <span>⚡</span> SMASH ZONE AI
+            </a>
+            <ul class="sidebar-menu">
+                <li><a href="/admin/dashboard.html" class="sidebar-link active">📊 Thống Kê Chung</a></li>
+                <li><a href="/admin/products.html" class="sidebar-link">🏸 Quản Lý Sản Phẩm</a></li>
+                <li><a href="/admin/orders.html" class="sidebar-link">📦 Quản Lý Đơn Hàng</a></li>
+                <li><a href="/admin/users.html" class="sidebar-link">👤 Quản Lý Người Dùng</a></li>
+                <li><a href="/index.html" class="sidebar-link" style="margin-top: 20px; border: 1.5px dashed var(--border-dark);">🏪 Về Trang Bán Hàng</a></li>
+            </ul>
+        </aside>
+
+        <!-- Admin Content -->
+        <main class="admin-content">
+            <div style="margin-bottom: 30px;">
+                <span class="badge-pill badge-yellow">SYSTEM OVERVIEW</span>
+                <h1 style="font-size: 30px; text-transform: uppercase; margin-top: 8px;">Tổng Quan Quản Trị Hệ Thống</h1>
+            </div>
+
+            <!-- Stats Grid Neobrutalism -->
+            <div class="stats-grid">
+                <div class="stat-card yellow">
+                    <span class="stat-label">Tổng Doanh Thu</span>
+                    <span class="stat-value" id="stat-revenue">185.600.000 đ</span>
+                </div>
+                <div class="stat-card orange">
+                    <span class="stat-label">Tổng Đơn Hàng</span>
+                    <span class="stat-value" id="stat-orders">142</span>
+                </div>
+                <div class="stat-card blue">
+                    <span class="stat-label">Sản Phẩm Trong Kho</span>
+                    <span class="stat-value" id="stat-products">106</span>
+                </div>
+                <div class="stat-card green">
+                    <span class="stat-label">Thành Viên Đăng Ký</span>
+                    <span class="stat-value" id="stat-users">1.008</span>
+                </div>
+            </div>
+
+            <!-- Recent Orders Section -->
+            <div style="margin-top: 40px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2 style="font-size: 22px; text-transform: uppercase;">📦 Đơn Hàng Mới Nhất</h2>
+                    <a href="/admin/products.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12px;">Quản Lý Sản Phẩm ➔</a>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã Đơn</th>
+                            <th>Khách Hàng</th>
+                            <th>Địa Chỉ Giao</th>
+                            <th>Phương Thức</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-orders">
+                        <tr>
+                            <td><strong>#10012</strong></td>
+                            <td>Đỗ Hà Thanh Minh</td>
+                            <td>Học viện CNBCVT, Hà Đông, Hà Nội</td>
+                            <td><span class="badge-pill badge-yellow">COD</span></td>
+                            <td style="font-weight: 900; color: var(--brand-primary);">5.980.000 đ</td>
+                            <td><span class="badge-pill badge-green">DELIVERED</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#10011</strong></td>
+                            <td>Quản Trị Viên</td>
+                            <td>Cau Giay, Ha Noi</td>
+                            <td><span class="badge-pill badge-yellow">COD</span></td>
+                            <td style="font-weight: 900; color: var(--brand-primary);">2.450.000 đ</td>
+                            <td><span class="badge-pill badge-yellow">PENDING</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>

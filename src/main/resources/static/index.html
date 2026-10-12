@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smash Zone - Thế Giới Cầu Lông & PTIT AI Recommender</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-container">
+            <a href="/index.html" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">SMASH <span>ZONE</span></span>
+                <span class="logo-badge">AI CODE</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/index.html" class="active">Trang Chủ</a>
+                <a href="/products.html">Sản Phẩm</a>
+                <a href="/products.html?category=V%E1%BB%A3t%20C%E1%BA%A7u%20L%C3%B4ng">Vợt Cầu Lông</a>
+                <a href="/products.html?category=Gi%C3%A0y%20C%E1%BA%A7u%20L%C3%B4ng">Giày Thi Đấu</a>
+                <a href="/products.html?category=Qu%E1%BA%A3%20C%E1%BA%A7u%20L%C3%B4ng">Quả Cầu & Phụ Kiện</a>
+            </nav>
+
+            <div class="search-box">
+                <form action="/products.html" method="GET">
+                    <input type="text" name="search" placeholder="Tìm kiếm vợt, giày, cước...">
+                    <button type="submit">TÌM</button>
+                </form>
+            </div>
+
+            <div class="user-actions">
+                <a href="/cart.html" class="cart-icon" title="Giỏ hàng">
+                    🛒 <span class="cart-badge" id="cart-count">0</span>
+                </a>
+                <div id="user-nav">
+                    <a href="/login.html" class="btn btn-secondary">Đăng Nhập</a>
+                    <a href="/register.html" class="btn btn-primary">Đăng Ký</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section matching PTIT AI Code Screenshot -->
+    <section class="container">
+        <div class="hero-section">
+            <div class="hero-text">
+                <div class="badge-pill badge-yellow" style="margin-bottom: 18px; font-size: 12px; padding: 5px 12px;">
+                    ⚡ PTIT AI BADMINTON PLATFORM
+                </div>
+                <h1>
+                    THẾ GIỚI CẦU LÔNG<br>
+                    <span class="highlighter-stroke">PTIT</span><br>
+                    CÙNG AI
+                </h1>
+                <p>
+                    Nền tảng mua sắm trang thiết bị cầu lông tối giản, được thiết kế theo phong cách Neobrutalism. Tích hợp AI Recommendation Engine đề xuất chuẩn xác dòng vợt theo lối đánh của bạn.
+                </p>
+                <div class="hero-actions">
+                    <a href="/products.html" class="btn btn-primary" style="padding: 14px 28px; font-size: 15px;">MUA NGAY</a>
+                    <a href="#block-collaborative" class="btn btn-secondary" style="padding: 14px 24px; font-size: 15px;">GỢI Ý AI</a>
+                </div>
+            </div>
+
+            <!-- Notebook Paper Code Terminal matching Screenshot -->
+            <div class="code-terminal-card">
+                <div class="terminal-header">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#ef4444; border:1.5px solid #181810;"></span>
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#facc15; border:1.5px solid #181810;"></span>
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#22c55e; border:1.5px solid #181810;"></span>
+                    </div>
+                    <span class="terminal-prompt">➔ ~ python3 AI_tutor.py</span>
+                </div>
+                <div class="notebook-paper-body">
+                    <div class="code-comment"># Hello from PTIT AI Recommender!</div>
+                    <div class="code-comment">print("Ready for badminton equipment matching?")</div>
+                    <br>
+                    <div><span class="code-keyword">def</span> <span class="code-func">optimal_racket</span>(user_id, playstyle):</div>
+                    <div style="padding-left: 20px;">tfidf = <span class="code-func">calculate_tfidf</span>(specs)</div>
+                    <div style="padding-left: 20px;">collab = <span class="code-func">collaborative_filter</span>(user_id)</div>
+                    <div style="padding-left: 20px;"><span class="code-keyword">if</span> playstyle == <span class="code-str">"OFFENSIVE"</span>:</div>
+                    <div style="padding-left: 40px;"><span class="code-keyword">return</span> [<span class="code-str">"Astrox 100ZZ"</span>, <span class="code-str">"Ryuga II"</span>]</div>
+                    <div style="padding-left: 20px;"><span class="code-keyword">return</span> <span class="code-func">hybrid_recommend</span>(tfidf, collab)</div>
+                    <div class="code-score" style="margin-top: 8px;">➔ [STATUS: 98.4% AI CONFIDENCE] <span class="typing-cursor">|</span></div>
+                </div>
+                <div class="terminal-footer">
+                    // CLICK VÀO CÁC KHỐI BÊN DƯỚI ĐỂ XEM SẢN PHẨM GỢI Ý
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Dynamic AI Recommendation Blocks -->
+    <main class="container" style="padding-bottom: 70px;">
+        <!-- Khối 1: Gợi ý gần đây (Content-Based) -->
+        <section class="recommendations-block" id="block-recent">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="badge-pill badge-yellow">TF-IDF CONTENT-BASED</span>
+                    <h2>🎯 Dành Riêng Cho Bạn</h2>
+                </div>
+                <a href="/products.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12px;">Xem Thêm ➔</a>
+            </div>
+            <div class="products-grid" id="grid-recent"></div>
+        </section>
+
+        <!-- Khối 2: Collaborative Filtering -->
+        <section class="recommendations-block" id="block-collaborative">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="badge-pill badge-orange">COLLABORATIVE FILTERING</span>
+                    <h2>⚡ Lông Thủ Cùng Gu Cũng Mua</h2>
+                </div>
+                <a href="/products.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12px;">Xem Thêm ➔</a>
+            </div>
+            <div class="products-grid" id="grid-collaborative"></div>
+        </section>
+
+        <!-- Khối 3: Sản phẩm bán chạy (Trending) -->
+        <section class="recommendations-block" id="block-trending">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="badge-pill badge-green">TOP TRENDING</span>
+                    <h2>🔥 Sản Phẩm Săn Đón Nhất</h2>
+                </div>
+                <a href="/products.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12px;">Toàn Bộ Kho ➔</a>
+            </div>
+            <div class="products-grid" id="grid-trending">
+                <p>Đang tải dữ liệu sản phẩm...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col">
+                <a href="/index.html" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">SMASH <span>ZONE</span></span>
+                    <span class="logo-badge">AI CODE</span>
+                </a>
+                <p style="margin-top: 15px; color: var(--text-muted); font-size: 14px;">
+                    Hệ sinh thái cầu lông công nghệ PTIT AI Code. Đề xuất sản phẩm thông minh bằng Machine Learning (TF-IDF & Collaborative Filtering), phân phối vợt, giày và phụ kiện chính hãng.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>Danh Mục Thiết Bị</h4>
+                <ul>
+                    <li><a href="/products.html?category=V%E1%BB%A3t%20c%E1%BA%A7u%20l%C3%B4ng">Vợt Cầu Lông Yonex & Victor</a></li>
+                    <li><a href="/products.html?category=Gi%C3%A0y%20c%E1%BA%A7u%20l%C3%B4ng">Giày Chuyên Dụng Giảm Chấn</a></li>
+                    <li><a href="/products.html?category=Ph%E1%BB%A5%20ki%E1%BB%87n%20c%E1%BA%A7u%20l%C3%B4ng">Quả Cầu Lông & Cước Căng</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Hỗ Trợ Sinh Viên PTIT</h4>
+                <ul>
+                    <li><a href="#">Bảo hành chính hãng 1 đổi 1</a></li>
+                    <li><a href="#">Tư vấn lối đánh công/thủ bằng AI</a></li>
+                    <li><a href="#">Hotline: 1900 6868</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Smash Zone Badminton Shop. Phong cách PTIT AI Code Neobrutalism. Spring Boot 3 & REST API.</p>
+        </div>
+    </footer>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/home/data')
+                .then(res => res.json())
+                .then(data => {
+                    // Block 1: Recent
+                    if (data.recentRecommendations && data.recentRecommendations.length > 0) {
+                        renderProductGrid('grid-recent', data.recentRecommendations);
+                    } else {
+                        document.getElementById('block-recent').style.display = 'none';
+                    }
+
+                    // Block 2: Collaborative
+                    if (data.collaborativeRecommendations && data.collaborativeRecommendations.length > 0) {
+                        renderProductGrid('grid-collaborative', data.collaborativeRecommendations);
+                    } else {
+                        document.getElementById('block-collaborative').style.display = 'none';
+                    }
+
+                    // Block 3: Trending
+                    if (data.trendingProducts && data.trendingProducts.length > 0) {
+                        renderProductGrid('grid-trending', data.trendingProducts);
+                    } else {
+                        document.getElementById('grid-trending').innerHTML = '<p>Đang cập nhật sản phẩm.</p>';
+                    }
+                })
+                .catch(err => {
+                    console.error("Lỗi khi tải trang chủ:", err);
+                    document.getElementById('grid-trending').innerHTML = '<p style="color:var(--text-muted)">Không thể kết nối máy chủ.</p>';
+                });
+        });
+
+        function renderProductGrid(elementId, products) {
+            const grid = document.getElementById(elementId);
+            if (!grid) return;
+
+            grid.innerHTML = products.map(p => {
+                const pId = p.productId || p.id;
+                const pName = p.productName || p.name || 'Sản phẩm cầu lông';
+                const pImg = p.image || 'https://images.unsplash.com/photo-1554080353-a576cf803bda?w=400';
+                const pPrice = p.unitPrice || p.price || 0;
+                const pCat = p.categoryName || 'Chính Hãng';
+                const pBrand = p.brand || 'YONEX';
+
+                return `
+                    <div class="product-card">
+                        <div class="product-img-wrapper">
+                            <span class="badge-pill badge-orange product-tag">${pBrand}</span>
+                            <a href="/product-detail.html?id=${pId}" style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+                                <img src="${pImg}" alt="${pName}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1554080353-a576cf803bda?w=400'">
+                            </a>
+                        </div>
+                        <div class="product-info">
+                            <span style="font-size:11px; text-transform:uppercase; color:var(--brand-primary); font-weight:800; letter-spacing:0.5px;">${pCat}</span>
+                            <a href="/product-detail.html?id=${pId}" class="product-name" title="${pName}">
+                                ${pName}
+                            </a>
+                            <div class="product-price-row">
+                                <span class="product-price">${formatCurrency(pPrice)}</span>
+                            </div>
+                            <div style="margin-top: 14px; display: flex; gap: 8px;">
+                                <a href="/product-detail.html?id=${pId}" class="btn btn-secondary" style="flex:1; font-size:12px; padding:8px 6px;">Chi Tiết</a>
+                                <button onclick="addToCart(${pId}, 1)" class="btn btn-primary" style="flex:1.2; font-size:12px; padding:8px 6px;">+ Giỏ Hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>

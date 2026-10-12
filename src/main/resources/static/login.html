@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Smash Zone AI</title>
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <style>
+        .auth-container {
+            max-width: 440px;
+            margin: 70px auto;
+            background: #ffffff;
+            padding: 45px 40px;
+            border-radius: 14px;
+            border: 2px solid var(--border-dark);
+            box-shadow: var(--shadow-xl);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="/index.html" class="logo" style="justify-content: center; margin-bottom: 15px;">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">SMASH <span>ZONE</span></span>
+                <span class="logo-badge">AI CODE</span>
+            </a>
+            <h2 style="margin-top: 15px; text-transform: uppercase;">Đăng Nhập Tài Khoản</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Hệ thống xác thực thành viên Smash Zone</p>
+        </div>
+
+        <div id="error-box" class="error-msg"></div>
+
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Tên đăng nhập / Username</label>
+                <input type="text" id="username" class="form-control" placeholder="Nhập username..." required>
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu..." required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; margin-top: 10px;">
+                ĐĂNG NHẬP NGAY ➔
+            </button>
+        </form>
+
+        <div style="background: #fdfbf7; border: 1.5px dashed var(--border-dark); border-radius: 8px; padding: 12px; margin-top: 25px; font-size: 13px;">
+            <strong>📌 Gợi ý đăng nhập nhanh:</strong>
+            <div style="margin-top: 4px; color: var(--text-muted);">
+                • Admin: <code>admin</code> / pass: <code>123456</code> (hoặc <code>1</code>)<br>
+                • Khách hàng: <code>B23DCCN543</code> / pass: <code>123</code>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 25px; font-size: 14px; color: var(--text-muted);">
+            Chưa có tài khoản? <a href="/register.html" style="color: var(--brand-primary); font-weight: 800; text-decoration: underline;">Đăng ký ngay</a>
+        </p>
+    </div>
+
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorBox = document.getElementById('error-box');
+
+            errorBox.style.display = 'none';
+
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.user && data.user.role === 'ADMIN') {
+                        window.location.href = '/admin/dashboard.html';
+                    } else {
+                        window.location.href = '/index.html';
+                    }
+                } else {
+                    errorBox.textContent = data.message || 'Đăng nhập thất bại';
+                    errorBox.style.display = 'block';
+                }
+            })
+            .catch(err => {
+                errorBox.textContent = 'Lỗi kết nối máy chủ!';
+                errorBox.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

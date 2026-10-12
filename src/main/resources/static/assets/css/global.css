@@ -1,0 +1,558 @@
+/* PTIT AI Code Style - Neobrutalism Design System for Smash Zone */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
+:root {
+    --bg-base: #fdfbf7;
+    --bg-card: #ffffff;
+    --border-dark: #181810;
+    --border-color: #181810;
+    --brand-primary: #f97316;
+    --brand-primary-hover: #ea580c;
+    --brand-yellow: #facc15;
+    --accent-blue: #0ea5e9;
+    --accent-green: #16a34a;
+    --accent-red: #ef4444;
+    --text-main: #181810;
+    --text-muted: #52525b;
+    --shadow-sm: 2px 2px 0px #181810;
+    --shadow-md: 4px 4px 0px #181810;
+    --shadow-lg: 6px 6px 0px #181810;
+    --shadow-xl: 8px 8px 0px #181810;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-base);
+    background-image: radial-gradient(#d1d5db 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Typography Utilities */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 900;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+.highlighter-stroke {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+}
+
+.highlighter-stroke::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    bottom: 4px;
+    height: 40%;
+    background-color: var(--brand-primary);
+    z-index: -1;
+    transform: rotate(-1deg);
+    opacity: 0.9;
+}
+
+.highlighter-yellow::after {
+    background-color: var(--brand-yellow);
+}
+
+/* Navbar - PTIT AI Code Style */
+.navbar {
+    background: #ffffff;
+    border-bottom: 2px solid var(--border-dark);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 12px 0;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.03);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Logo Box matching PTIT AI Code */
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    border: 2px solid var(--border-dark);
+    border-radius: 8px;
+    padding: 6px 14px;
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.15s ease;
+}
+
+.logo:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: var(--shadow-md);
+}
+
+.logo-icon {
+    font-size: 20px;
+}
+
+.logo-badge {
+    background: var(--brand-primary);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-dark);
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+}
+
+.logo-text span {
+    color: var(--brand-primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    transition: all 0.15s ease;
+}
+
+.nav-links a:hover {
+    border-color: var(--border-dark);
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+    transform: translate(-1px, -1px);
+}
+
+.nav-links a.active {
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    box-shadow: var(--shadow-sm);
+    color: var(--brand-primary);
+}
+
+/* Search Box */
+.search-box form {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 8px;
+    padding: 4px 10px;
+    box-shadow: var(--shadow-sm);
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 600;
+    width: 220px;
+    padding: 4px 6px;
+}
+
+.search-box input::placeholder {
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.search-box button {
+    background: var(--brand-primary);
+    color: white;
+    border: 1.5px solid var(--border-dark);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Cart Icon */
+.cart-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    font-size: 20px;
+    transition: all 0.15s ease;
+}
+
+.cart-icon:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: var(--shadow-md);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--brand-primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    border: 1.5px solid var(--border-dark);
+    box-shadow: 1px 1px 0 #181810;
+}
+
+/* User Pill & Dropdown */
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.user-name {
+    padding: 8px 14px;
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s ease;
+}
+
+.user-dropdown:hover .user-name {
+    transform: translate(-1px, -1px);
+    box-shadow: var(--shadow-md);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    background-color: #ffffff;
+    min-width: 210px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border-dark);
+}
+
+.dropdown-content a {
+    color: var(--text-main);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #f0ede8;
+    transition: all 0.15s;
+}
+
+.dropdown-content a:hover {
+    background-color: #fef08a;
+    color: #181810;
+}
+
+.user-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Neobrutalist Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid var(--border-dark);
+    box-shadow: var(--shadow-md);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.15s ease;
+}
+
+.btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+    background: var(--brand-primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--brand-primary-hover);
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: var(--text-main);
+}
+
+.btn-secondary:hover {
+    background: #fdfbf7;
+}
+
+.btn-yellow {
+    background: var(--brand-yellow);
+    color: var(--text-main);
+}
+
+/* Neobrutalist Cards */
+.card-brutal, .product-card {
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-brutal:hover, .product-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Pill Badges */
+.badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border: 1.5px solid var(--border-dark);
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    box-shadow: 1.5px 1.5px 0 #181810;
+}
+
+.badge-orange { background: #ffedd5; color: #9a3412; }
+.badge-yellow { background: #fef08a; color: #854d0e; }
+.badge-blue { background: #e0f2fe; color: #075985; }
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+
+/* Form Controls */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--border-dark);
+    background: #ffffff;
+    color: var(--text-main);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    box-shadow: var(--shadow-sm);
+    outline: none;
+    transition: all 0.15s ease;
+}
+
+.form-control:focus {
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-md);
+    transform: translate(-1px, -1px);
+}
+
+/* Alert / Error Boxes */
+.error-msg {
+    background: #fee2e2;
+    border: 2px solid var(--border-dark);
+    box-shadow: var(--shadow-sm);
+    color: #991b1b;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    display: none;
+}
+
+/* Modal Window */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #ffffff;
+    border: 3px solid var(--border-dark);
+    border-radius: 14px;
+    padding: 32px;
+    width: 90%;
+    max-width: 580px;
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-dark);
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+}
+
+.close-btn {
+    background: #fee2e2;
+    border: 2px solid var(--border-dark);
+    border-radius: 6px;
+    box-shadow: 2px 2px 0 var(--border-dark);
+    color: var(--text-main);
+    font-size: 18px;
+    font-weight: 900;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background: #fecaca;
+    transform: translate(-1px, -1px);
+}
+
+/* Footer */
+.footer {
+    background: #ffffff;
+    border-top: 2px solid var(--border-dark);
+    padding: 50px 0 25px;
+    margin-top: auto;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-col h4 {
+    margin-bottom: 18px;
+    color: var(--text-main);
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.15s;
+}
+
+.footer-col ul li a:hover {
+    color: var(--brand-primary);
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 35px;
+    border-top: 2px dashed var(--border-dark);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+}

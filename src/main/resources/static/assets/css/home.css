@@ -1,0 +1,217 @@
+/* PTIT AI Code Style - home.css */
+
+.hero-section {
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 14px;
+    box-shadow: var(--shadow-xl);
+    padding: 60px 50px;
+    margin: 40px 0 60px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.12;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    color: var(--text-main);
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    max-width: 500px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Notebook Paper Code Terminal */
+.code-terminal-card {
+    background: #fdfbf7;
+    border: 2px solid var(--border-dark);
+    border-radius: 10px;
+    box-shadow: 6px 6px 0 var(--border-dark);
+    overflow: hidden;
+    position: relative;
+    font-family: 'Fira Code', Consolas, monospace;
+}
+
+.terminal-header {
+    background: #ffffff;
+    border-bottom: 2px solid var(--border-dark);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.terminal-prompt {
+    font-size: 13px;
+    font-weight: 700;
+    color: #181810;
+    background: var(--brand-yellow);
+    padding: 3px 8px;
+    border: 1.5px solid var(--border-dark);
+    border-radius: 4px;
+}
+
+.notebook-paper-body {
+    background-color: #fdfbf7;
+    background-image: linear-gradient(0deg, transparent 23px, #e2e8f0 23px, #e2e8f0 24px, transparent 24px);
+    background-size: 100% 24px;
+    line-height: 24px;
+    padding: 20px 20px 20px 48px;
+    font-size: 13px;
+    color: #1e293b;
+    position: relative;
+    min-height: 220px;
+}
+
+.notebook-paper-body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 32px;
+    width: 2px;
+    background-color: #f43f5e;
+    opacity: 0.5;
+}
+
+.code-keyword { color: #2563eb; font-weight: bold; }
+.code-func { color: #0ea5e9; font-weight: bold; }
+.code-str { color: #16a34a; }
+.code-comment { color: #94a3b8; font-style: italic; }
+.code-score { color: #f97316; font-weight: bold; }
+
+.terminal-footer {
+    background: var(--brand-primary);
+    color: #ffffff;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border-top: 2px solid var(--border-dark);
+    text-transform: uppercase;
+}
+
+/* AI Recommendation Blocks */
+.recommendations-block {
+    margin-bottom: 55px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-dark);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-title h2 {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+/* Products Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 26px;
+}
+
+.product-img-wrapper {
+    position: relative;
+    height: 220px;
+    background: #f8f6f2;
+    border-bottom: 2px solid var(--border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    overflow: hidden;
+}
+
+.product-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.08);
+}
+
+.product-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.product-info {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-name {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 42px;
+}
+
+.product-name:hover {
+    color: var(--brand-primary);
+}
+
+.product-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 14px;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--brand-primary);
+}
+
+@media (max-width: 900px) {
+    .hero-section {
+        grid-template-columns: 1fr;
+        padding: 40px 24px;
+    }
+}

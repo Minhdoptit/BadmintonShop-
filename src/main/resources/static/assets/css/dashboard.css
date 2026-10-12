@@ -1,0 +1,146 @@
+/* PTIT AI Code Style - dashboard.css */
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 270px;
+    background-color: #ffffff;
+    color: var(--text-main);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-right: 2px solid var(--border-dark);
+}
+
+.sidebar-brand {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--border-dark);
+    padding: 8px 14px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+}
+
+.sidebar-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--text-main);
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: all 0.15s ease;
+}
+
+.sidebar-link:hover {
+    background-color: #fdfbf7;
+    border-color: var(--border-dark);
+    box-shadow: var(--shadow-sm);
+    transform: translate(-2px, -2px);
+}
+
+.sidebar-link.active {
+    background-color: var(--brand-primary);
+    color: #ffffff;
+    border-color: var(--border-dark);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-content {
+    flex: 1;
+    padding: 40px 5%;
+    background-color: var(--bg-base);
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background-color: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.stat-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-xl);
+}
+
+.stat-card.yellow { background: #fef08a; }
+.stat-card.orange { background: #ffedd5; }
+.stat-card.blue { background: #e0f2fe; }
+.stat-card.green { background: #dcfce7; }
+
+.stat-label {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--text-main);
+}
+
+/* Admin Data Tables */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border: 2px solid var(--border-dark);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.admin-table th, .admin-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1.5px solid var(--border-dark);
+    font-size: 14px;
+}
+
+.admin-table th {
+    background: #fdfbf7;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-table tr:hover {
+    background-color: #faf7f2;
+}
